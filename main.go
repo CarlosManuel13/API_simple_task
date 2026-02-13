@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"log"
 	"encoding/json"
+	"strings"
 )
 
 type Task struct {
@@ -23,7 +24,7 @@ var tasks = []Task{
 func manageTasks(w http.ResponseWriter, r *http.Request){
 	
 	switch r.Method {
-
+		case http.MethodGet:
 			id := strings.TrimPrefix(r.URL.Path, "/tasks/")
 			
 			if id == "" {
@@ -35,15 +36,15 @@ func manageTasks(w http.ResponseWriter, r *http.Request){
 
 			for _, t := range tasks {
 				if t.ID == id {
-					json.NewEncoder(w).Encode(t)
 					w.WriteHeader(http.StatusOK)
+					json.NewEncoder(w).Encode(t)
 					return
 				}
 			}
 			
 			http.Error(w, "Task not found", http.StatusNotFound)
 		
-		case http.MethodPost: 
+		case http.MethodPost:
 			newTask := Task{}
 			err := json.NewDecoder(r.Body).Decode(&newTask)
 		
@@ -81,7 +82,7 @@ func manageTasks(w http.ResponseWriter, r *http.Request){
 
 func main () {
 
-	http.HandleFunc("/tasks", manageTasks)
+	http.HandleFunc("/tasks/", manageTasks)
 	fmt.Println("Starting Server...")
 	log.Fatal(http.ListenAndServe(":8000", nil))
 
