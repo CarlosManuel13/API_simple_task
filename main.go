@@ -29,7 +29,6 @@ func manageTasks(w http.ResponseWriter, r *http.Request){
 			w.WriteHeader(http.StatusOK)
 			json.NewEncoder(w).Encode(tasks)
 		
-		
 		case http.MethodPost: 
 			newTask := Task{}
 			err := json.NewDecoder(r.Body).Decode(&newTask)
@@ -45,6 +44,19 @@ func manageTasks(w http.ResponseWriter, r *http.Request){
 			
 			w.WriteHeader(http.StatusCreated)
 			json.NewEncoder(w).Encode(newTask)
+		
+		case http.MethodDelete:
+			id := strings.TrimPrefix(r.URL.Path, "/tasks/")
+
+			for i, t := range tasks {
+				if t.ID == id {
+					tasks = append(tasks[:i],tasks[i+1:]...)
+					w.WriteHeader(http.StatusOK)
+					fmt.Fprintf(w,"Task with id:%s was deleted sucessfuly", id)
+					return
+				}
+			}
+			http.Error(w, "Task not found", http.StatusNotFound)
 		
 		default:
 			w.WriteHeader(http.StatusMethodNotAllowed)
