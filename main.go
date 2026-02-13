@@ -24,10 +24,24 @@ func manageTasks(w http.ResponseWriter, r *http.Request){
 	
 	switch r.Method {
 
-		case http.MethodGet: 
-			w.Header().Set("Content-type", "application/json")
-			w.WriteHeader(http.StatusOK)
-			json.NewEncoder(w).Encode(tasks)
+			id := strings.TrimPrefix(r.URL.Path, "/tasks/")
+			
+			if id == "" {
+				w.Header().Set("Content-type", "application/json")
+				w.WriteHeader(http.StatusOK)
+				json.NewEncoder(w).Encode(tasks)
+				return
+			}
+
+			for _, t := range tasks {
+				if t.ID == id {
+					json.NewEncoder(w).Encode(t)
+					w.WriteHeader(http.StatusOK)
+					return
+				}
+			}
+			
+			http.Error(w, "Task not found", http.StatusNotFound)
 		
 		case http.MethodPost: 
 			newTask := Task{}
