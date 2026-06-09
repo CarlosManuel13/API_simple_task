@@ -30,7 +30,7 @@ Use these commands in your terminal to test each server feature:
 ### 🔹 1. List all tasks (GET)
 Obtains the complete array of JSON objects.
 ```bash
-curl -i http://localhost:8000/tasks
+curl -i http://localhost:8000/tasks/
 ```
 
 ### 🔹 2. List a specific task (GET)
