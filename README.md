@@ -1,3 +1,5 @@
+![CI/CD Pipeline](https://github.com/CarlosManuel13/API_simple_task/actions/workflows/ci-cd.yml/badge.svg)
+
 # 🚀 Go Task Manager API
 
 A minimalist RESTful API built with **Go** (Golang) for task management (To-Do list). This project uses the standard `net/http` package to demonstrate route handling, HTTP methods, and in-memory data persistence (slices).
